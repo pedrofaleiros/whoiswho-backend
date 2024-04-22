@@ -1,0 +1,88 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id String @id @default(uuid())
+
+  username String @unique
+  password String
+
+  Player Player?
+
+  Rooms Room[]
+}
+
+enum GameStatus {
+  idle
+  playing
+  finished
+}
+
+model Room {
+  code String @id
+
+  status    GameStatus @default(idle)
+  isOpen    Boolean    @default(true)
+  impostors Int        @default(1)
+
+  admId String
+  Adm   User   @relation(fields: [admId], references: [id], onDelete: Cascade)
+
+  placeId String?
+  Place   Place?  @relation(fields: [placeId], references: [id], onDelete: SetNull)
+
+  Players Player[]
+
+  createdAt DateTime @default(now())
+}
+
+model Player {
+  socketId String @unique
+  userId   String @unique
+  User     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  username String
+
+  roomCode String
+  Room     Room   @relation(fields: [roomCode], references: [code], onDelete: Cascade)
+
+  professionId String?
+  Profession   Profession? @relation(fields: [professionId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@unique([userId, roomCode])
+}
+
+model PlaceCategory {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  Places      Place[]
+}
+
+model Place {
+  id          String       @id @default(uuid())
+  name        String
+  Professions Profession[]
+
+  placeCategoryId String?
+  PlaceCategory   PlaceCategory? @relation(fields: [placeCategoryId], references: [id], onDelete: Cascade)
+
+  Rooms Room[]
+}
+
+model Profession {
+  id   String @id @default(uuid())
+  name String
+
+  placeId String
+  Place   Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  Player  Player[]
+}
