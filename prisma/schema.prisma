@@ -43,9 +43,9 @@ model Room {
 }
 
 model Player {
-  socketId String @unique
-  userId   String @unique
-  User     User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  socketId String? @unique
+  userId   String  @unique
+  User     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   username String
 

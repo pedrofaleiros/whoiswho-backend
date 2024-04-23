@@ -41,6 +41,7 @@ class App {
         this.server.listen(Env.PORT, async () => {
             console.clear()
             console.log(`running at ${Env.PORT}`)
+
         })
     }
 
@@ -63,7 +64,7 @@ class App {
     private async _printPlayers() {
         const players = await prismaClient.player.findMany()
         players.forEach(p => {
-            console.log(`${p.username}; ${p.roomCode}; ${p.socketId};`)
+            console.log(`${p.roomCode}; ${p.username}; ${p.socketId};`)
         })
     }
 

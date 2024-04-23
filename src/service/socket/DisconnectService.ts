@@ -7,7 +7,7 @@ class DisconnectService extends SocketService {
         try {
             const player = await this.playerR.findBySocketId(socket.id)
             if (player !== null) {
-                await this.playerR.delete(player.userId);
+                await this.playerR.removeSocketId(player.userId);
                 const room = await this.roomR.findByCode(player?.roomCode)
                 if (room !== null) {
                     await this.roomPlayers(io, room)

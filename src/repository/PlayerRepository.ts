@@ -35,13 +35,23 @@ class PlayerRepository {
 
     async listByRoom(roomCode: string): Promise<Player[]> {
         return await prismaClient.player.findMany({
-            where: { roomCode: roomCode }
+            where: {
+                roomCode: roomCode,
+                socketId: { not: null }
+            }
         })
     }
 
     async delete(id: string) {
         return await prismaClient.player.delete({
             where: { userId: id }
+        })
+    }
+
+    async removeSocketId(id: string) {
+        return await prismaClient.player.update({
+            where: { userId: id },
+            data: { socketId: null }
         })
     }
 }

@@ -49,6 +49,23 @@ class SocketService {
             players: players,
         })
     }
+
+    protected async removePlayer(io: Server, room: Room, player: Player) {
+        await this.playerR.delete(player.userId)
+        var sockets = io.sockets.adapter.rooms.get(room.code)
+        if (sockets) {
+            sockets.forEach(skt => {
+                var s = io.sockets.sockets.get(skt)
+                if (s && s.id === player.socketId) {
+                    s.emit(SocketConst.DISCONNECT_ERROR, 'Você foi removido da sala.')
+                    s.leave(room.code)
+                    s.disconnect()
+                    return;
+                }
+            })
+        }
+        await this.roomPlayers(io, room)
+    }
 }
 
 export default SocketService

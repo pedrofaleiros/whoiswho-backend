@@ -3,17 +3,20 @@ import { SocketConst } from "../utils/SocketConstants";
 import CreateRoomService from "../service/socket/CreateRoomService";
 import JoinRoomService from "../service/socket/JoinRoomService";
 import DisconnectService from "../service/socket/DisconnectService";
+import LeaveAllRoomsService from "../service/socket/LeaveAllService";
 
 class SocketController {
 
     private createRoom: CreateRoomService
     private joinRoom: JoinRoomService
     private disconnect: DisconnectService
+    private leaveAll: LeaveAllRoomsService
 
     constructor() {
         this.createRoom = new CreateRoomService()
         this.joinRoom = new JoinRoomService()
         this.disconnect = new DisconnectService()
+        this.leaveAll = new LeaveAllRoomsService()
     }
 
     async handleConnection(io: Server, socket: Socket) {
@@ -34,6 +37,10 @@ class SocketController {
             SocketConst.DISCONNECT,
             async (data) => await this.disconnect.handle(io, socket)
         );
+
+        socket.on('leaveAll',
+            async (data) => await this.leaveAll.handle(io, socket, data)
+        )
     }
 }
 

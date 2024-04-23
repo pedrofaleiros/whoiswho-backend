@@ -2,20 +2,25 @@ import { Server, Socket } from "socket.io"
 import { SocketConst } from "../../utils/SocketConstants"
 import { SocketError } from "../../utils/errors"
 import SocketService from "./SocketService"
+import getUserId from "../../utils/getUserId"
 
 class CreateRoomService extends SocketService {
 
     async handle(io: Server, socket: Socket, data: any) {
         try {
-            const { userId } = data
+            const { token } = data
+
+            const userId = getUserId(token)
 
             if (typeof userId !== 'string') throw new SocketError('Usuário inválido.');
             const user = await this.userR.findById(userId)
             if (user === null) throw new SocketError('Usuário não encontrado.');
 
             const findPlayer = await this.playerR.findById(user.id)
-            if (findPlayer !== null)
-                throw new SocketError('Usuário já esta em uma sala');
+            if (findPlayer !== null && findPlayer.socketId !== null) {
+                socket.emit(SocketConst.WARNING, "O usuário já está em uma sala.")
+                return
+            }
 
             const roomCode = await this.getRoomCode()
             const room = await this.roomR.create({

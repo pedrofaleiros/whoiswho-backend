@@ -30,9 +30,18 @@ class SocketError extends Error {
     }
 }
 
+class NotAuthError extends Error {
+    message: string
+    constructor() {
+        super()
+        this.message = "Não Autorizado"
+    }
+}
+
 export {
     ResourceNotFoundError,
     UsecaseError,
     ValidationError,
-    SocketError
+    SocketError,
+    NotAuthError,
 }

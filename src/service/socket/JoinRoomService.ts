@@ -2,11 +2,14 @@ import { Server, Socket } from "socket.io";
 import SocketService from "./SocketService";
 import { SocketError } from "../../utils/errors";
 import { SocketConst } from "../../utils/SocketConstants";
+import getUserId from "../../utils/getUserId";
 
 class JoinRoomService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {
         try {
-            const { userId, roomCode } = data
+            const { roomCode, token } = data
+
+            const userId = getUserId(token)
 
             if (typeof userId !== 'string') throw new SocketError('Usuário inválido.');
             if (typeof roomCode !== 'string') throw new SocketError('Código inválido.');
@@ -18,9 +21,12 @@ class JoinRoomService extends SocketService {
             if (room === null) throw new SocketError('Sala não encontrada.');
             if (!room.isOpen) throw new SocketError('A sala esta fechada.');
 
+            // Verifica se o usuario ja esta ativo em uma sala
             const findPlayer = await this.playerR.findById(user.id)
-            if (findPlayer !== null && findPlayer.roomCode !== room.code)
-                throw new SocketError('Usuário já esta em uma sala');
+            if (findPlayer !== null && findPlayer.socketId !== null) {
+                socket.emit(SocketConst.WARNING, "O usuário já está em uma sala.")
+                return
+            }
 
             await this.playerR.save({
                 userId: user.id,
