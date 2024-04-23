@@ -4,7 +4,7 @@ import { SocketError } from "../../utils/errors";
 import { SocketConst } from "../../utils/SocketConstants";
 import getUserId from "../../utils/getUserId";
 
-class LeaveAllRoomsService extends SocketService {
+class LeaveAllService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {
         try {
             const { token } = data
@@ -34,4 +34,4 @@ class LeaveAllRoomsService extends SocketService {
     }
 }
 
-export default LeaveAllRoomsService
+export default LeaveAllService
