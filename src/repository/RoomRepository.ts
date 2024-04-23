@@ -18,6 +18,13 @@ class RoomRepository {
             }
         })
     }
+
+    async setImpostors(code: string, num: number) {
+        return await prismaClient.room.update({
+            where: { code: code },
+            data: { impostors: num }
+        })
+    }
 }
 
 export default RoomRepository;

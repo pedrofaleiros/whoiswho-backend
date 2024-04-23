@@ -4,18 +4,21 @@ import CreateRoomService from "../service/socket/CreateRoomService";
 import JoinRoomService from "../service/socket/JoinRoomService";
 import DisconnectService from "../service/socket/DisconnectService";
 import LeaveAllService from "../service/socket/LeaveAllService";
+import SetImpostorsService from "../service/socket/SetImpostorsService";
 class SocketController {
 
     private createRoom: CreateRoomService
     private joinRoom: JoinRoomService
     private disconnect: DisconnectService
     private leaveAll: LeaveAllService
+    private setImpostors: SetImpostorsService
 
     constructor() {
         this.createRoom = new CreateRoomService()
         this.joinRoom = new JoinRoomService()
         this.disconnect = new DisconnectService()
         this.leaveAll = new LeaveAllService()
+        this.setImpostors = new SetImpostorsService()
     }
 
     async handleConnection(io: Server, socket: Socket) {
@@ -36,6 +39,11 @@ class SocketController {
             SocketConst.DISCONNECT,
             async (data) => await this.disconnect.handle(io, socket)
         );
+
+        socket.on(
+            SocketConst.SET_IMPOSTORS,
+            async (data) => await this.setImpostors.handle(io, socket, data)
+        )
 
         socket.on('leaveAll',
             async (data) => await this.leaveAll.handle(io, socket, data)

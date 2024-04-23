@@ -14,6 +14,7 @@ class SocketConstants {
     static ROOM_CODE = "roomCode"
     static GAME_STATUS = "gameStatus"
     static GAME_IMPOSTORS = "gameImpostors"
+    static SET_IMPOSTORS = "setImpostors"
     static GAME_PLAYERS = "gamePlayers"
 }
 
