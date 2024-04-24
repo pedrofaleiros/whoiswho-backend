@@ -66,6 +66,21 @@ class SocketService {
         }
         await this.roomPlayers(io, room)
     }
+
+    protected async disconnectPlayer(io: Server, room: Room, player: Player) {
+        if (player.socketId !== null) {
+            const socketToRemove = io.sockets.sockets.get(player.socketId)
+            
+            if (socketToRemove) {
+                socketToRemove.emit(SocketConst.DISCONNECT_ERROR, 'Você foi removido da sala.')
+                socketToRemove.leave(room.code)
+                socketToRemove.disconnect()
+
+                await this.playerR.delete(player.userId)
+                await this.roomPlayers(io, room)
+            }
+        }
+    }
 }
 
 export default SocketService

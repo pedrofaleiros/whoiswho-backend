@@ -41,7 +41,6 @@ class App {
         this.server.listen(Env.PORT, async () => {
             console.clear()
             console.log(`running at ${Env.PORT}`)
-
         })
     }
 

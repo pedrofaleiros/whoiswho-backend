@@ -18,8 +18,10 @@ class CreateRoomService extends SocketService {
 
             const findPlayer = await this.playerR.findById(user.id)
             if (findPlayer !== null && findPlayer.socketId !== null) {
-                socket.emit(SocketConst.WARNING, "O usuário já está em uma sala.")
-                return
+                if (findPlayer.socketId === socket.id) return;
+                // Remove conexao com o socket que estiver na sala
+                const room = await this.roomR.findByCode(findPlayer.roomCode)
+                if (room) await this.disconnectPlayer(io, room, findPlayer);
             }
 
             const roomCode = await this.getRoomCode()

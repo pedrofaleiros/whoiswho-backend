@@ -24,8 +24,9 @@ class JoinRoomService extends SocketService {
             // Verifica se o usuario ja esta ativo em uma sala
             const findPlayer = await this.playerR.findById(user.id)
             if (findPlayer !== null && findPlayer.socketId !== null) {
-                socket.emit(SocketConst.WARNING, "O usuário já está em uma sala.")
-                return
+                // Remove conexao com o socket que estiver na sala
+                if (findPlayer.socketId === socket.id) return;
+                await this.disconnectPlayer(io, room, findPlayer)
             }
 
             await this.playerR.save({
