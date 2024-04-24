@@ -14,6 +14,16 @@ class AuthService {
         this.repository = new UserRepository()
     }
 
+    async session(userId: string) {
+        const user = await this.repository.findById(userId)
+        if (user === null) throw new ResourceNotFoundError('Usuário não encontrado.');
+        return {
+            id: user.id,
+            username: user.username,
+            token: getJWT(user.id, user.username),
+        }
+    }
+
     async login(user: UserModel) {
         if (typeof user.username !== "string") throw new ValidationError("Username inválido.")
         if (typeof user.password !== "string") throw new ValidationError("Senha inválida.")

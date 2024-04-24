@@ -21,7 +21,7 @@ class LeaveAllService extends SocketService {
             if (room === null) throw new SocketError('Sala não encontrada.');
 
             // Remove o player da sala
-            await this.removePlayer(io, room, player)
+            await this.disconnectPlayer(io, room, player)
 
             await this.roomPlayers(io, room)
 

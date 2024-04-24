@@ -10,6 +10,7 @@ const router = Router();
 
 router.post('/auth/signup', auth.signup)
 router.post('/auth', auth.login)
+router.post('/session', isAuthenticaded, auth.session)
 
 router.get('/place', isAuthenticaded, place.getAll)
 

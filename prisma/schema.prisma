@@ -37,9 +37,23 @@ model Room {
   placeId String?
   Place   Place?  @relation(fields: [placeId], references: [id], onDelete: SetNull)
 
-  Players Player[]
+  Players           Player[]
+  PlayerProfessions PlayerProfession[]
 
   createdAt DateTime @default(now())
+}
+
+model PlayerProfession {
+  roomCode String
+  Room     Room   @relation(fields: [roomCode], references: [code])
+
+  playerUserId String
+  player       Player @relation(fields: [playerUserId], references: [userId])
+
+  professionId String
+  profession   Profession @relation(fields: [professionId], references: [id])
+
+  @@unique([roomCode, playerUserId])
 }
 
 model Player {
@@ -52,10 +66,8 @@ model Player {
   roomCode String
   Room     Room   @relation(fields: [roomCode], references: [code], onDelete: Cascade)
 
-  professionId String?
-  Profession   Profession? @relation(fields: [professionId], references: [id], onDelete: SetNull)
-
-  createdAt DateTime @default(now())
+  createdAt        DateTime           @default(now())
+  PlayerProfession PlayerProfession[]
 
   @@unique([userId, roomCode])
 }
@@ -82,7 +94,7 @@ model Profession {
   id   String @id @default(uuid())
   name String
 
-  placeId String
-  Place   Place    @relation(fields: [placeId], references: [id], onDelete: Cascade)
-  Player  Player[]
+  placeId          String
+  Place            Place              @relation(fields: [placeId], references: [id], onDelete: Cascade)
+  PlayerProfession PlayerProfession[]
 }
