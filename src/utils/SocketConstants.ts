@@ -16,6 +16,11 @@ class SocketConstants {
     static GAME_IMPOSTORS = "gameImpostors"
     static SET_IMPOSTORS = "setImpostors"
     static GAME_PLAYERS = "gamePlayers"
+
+    static GAME_PROFESSIONS = 'gameProfessions'
+    static GAME_PLACE = 'gamePlace'
+
+    static GAME_DATA = 'gameData'
 }
 
 export {

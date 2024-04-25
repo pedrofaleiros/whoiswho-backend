@@ -5,6 +5,8 @@ import JoinRoomService from "../service/socket/JoinRoomService";
 import DisconnectService from "../service/socket/DisconnectService";
 import LeaveAllService from "../service/socket/LeaveAllService";
 import SetImpostorsService from "../service/socket/SetImpostorsService";
+import StartGameService from "../service/socket/StartGameService";
+import FinishGameService from "../service/socket/FinishGameService";
 class SocketController {
 
     private createRoom: CreateRoomService
@@ -12,6 +14,8 @@ class SocketController {
     private disconnect: DisconnectService
     private leaveAll: LeaveAllService
     private setImpostors: SetImpostorsService
+    private startGame: StartGameService
+    private finishGame: FinishGameService
 
     constructor() {
         this.createRoom = new CreateRoomService()
@@ -19,6 +23,8 @@ class SocketController {
         this.disconnect = new DisconnectService()
         this.leaveAll = new LeaveAllService()
         this.setImpostors = new SetImpostorsService()
+        this.startGame = new StartGameService()
+        this.finishGame = new FinishGameService()
     }
 
     async handleConnection(io: Server, socket: Socket) {
@@ -43,6 +49,16 @@ class SocketController {
         socket.on(
             SocketConst.SET_IMPOSTORS,
             async (data) => await this.setImpostors.handle(io, socket, data)
+        )
+
+        socket.on(
+            SocketConst.START_GAME,
+            async (data) => await this.startGame.handle(io, socket, data)
+        )
+
+        socket.on(
+            SocketConst.FINISH_GAME,
+            async (data) => await this.finishGame.handle(io, socket, data)
         )
 
         socket.on('leaveAll',

@@ -19,7 +19,7 @@ class JoinRoomService extends SocketService {
 
             const room = await this.roomR.findByCode(roomCode)
             if (room === null) throw new SocketError('Sala não encontrada.');
-            if (!room.isOpen) throw new SocketError('A sala esta fechada.');
+            // if (!room.isOpen) throw new SocketError('A sala esta fechada.');
 
             // Verifica se o usuario ja esta ativo em uma sala
             const findPlayer = await this.playerR.findById(user.id)
@@ -41,6 +41,7 @@ class JoinRoomService extends SocketService {
             this.roomStatus(socket, room)
             this.roomImpostors(socket, room)
             await this.roomPlayers(io, room)
+            await this.gameData(io, room)
 
         } catch (error) {
             if (error instanceof SocketError) {

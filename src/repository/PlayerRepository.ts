@@ -42,6 +42,15 @@ class PlayerRepository {
         })
     }
 
+    async listPlayerProfessions(roomCode: string) {
+        return await prismaClient.playerProfession.findMany({
+            where: { roomCode: roomCode },
+            include: {
+                player: true
+            }
+        })
+    }
+
     async delete(id: string) {
         return await prismaClient.player.delete({
             where: { userId: id }

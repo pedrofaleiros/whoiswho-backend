@@ -45,13 +45,13 @@ model Room {
 
 model PlayerProfession {
   roomCode String
-  Room     Room   @relation(fields: [roomCode], references: [code])
+  Room     Room   @relation(fields: [roomCode], references: [code], onDelete: Cascade)
 
   playerUserId String
-  player       Player @relation(fields: [playerUserId], references: [userId])
+  player       Player @relation(fields: [playerUserId], references: [userId], onDelete: Cascade)
 
-  professionId String
-  profession   Profession @relation(fields: [professionId], references: [id])
+  profession String?
+  isImpostor Boolean @default(false)
 
   @@unique([roomCode, playerUserId])
 }
@@ -94,7 +94,6 @@ model Profession {
   id   String @id @default(uuid())
   name String
 
-  placeId          String
-  Place            Place              @relation(fields: [placeId], references: [id], onDelete: Cascade)
-  PlayerProfession PlayerProfession[]
+  placeId String
+  Place   Place  @relation(fields: [placeId], references: [id], onDelete: Cascade)
 }
