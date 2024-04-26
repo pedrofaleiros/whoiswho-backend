@@ -73,7 +73,7 @@ class SocketService {
     }
 
     protected async disconnectPlayer(io: Server, room: Room, player: Player) {
-        if (player.socketId !== null) {
+        if (player.socketId) {
             const socketToRemove = io.sockets.sockets.get(player.socketId)
 
             if (socketToRemove) {

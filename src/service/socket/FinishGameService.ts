@@ -2,7 +2,6 @@ import { Server, Socket } from "socket.io";
 import SocketService from "./SocketService";
 import { SocketError } from "../../utils/errors";
 import { SocketConst } from "../../utils/SocketConstants";
-import getUserId from "../../utils/getUserId";
 
 class FinishGameService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {

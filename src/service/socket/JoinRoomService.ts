@@ -13,7 +13,7 @@ class JoinRoomService extends SocketService {
 
             // Verifica se o usuario ja esta ativo em uma sala
             const findPlayer = await this.playerR.findById(user.id)
-            if (findPlayer !== null && findPlayer.socketId !== null) {
+            if (findPlayer && findPlayer.socketId) {
                 // Remove conexao com o socket que estiver na sala
                 if (findPlayer.socketId === socket.id) return;
                 await this.disconnectPlayer(io, room, findPlayer)
@@ -39,7 +39,6 @@ class JoinRoomService extends SocketService {
             }
             socket.disconnect()
         }
-
     }
 }
 

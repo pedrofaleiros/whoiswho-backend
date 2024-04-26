@@ -12,7 +12,7 @@ export async function deleteRooms() {
     // });
     
     const rooms = await prismaClient.room.findMany({
-        where: { createdAt: { lt: time } }
+        // where: { createdAt: { lt: time } }
     });
     rooms.forEach(r => {
         console.log(`${r.code}: ${r.createdAt}`)
