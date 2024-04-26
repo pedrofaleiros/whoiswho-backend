@@ -6,7 +6,7 @@ class SocketConstants {
     static CREATE_ROOM = "createRoom"
 
     static WARNING = 'warning'
-    static DISCONNECT_ERROR = "disconnectError"
+    static ERROR = "error"
 
     static START_GAME = "startGame"
     static FINISH_GAME = "finishGame"

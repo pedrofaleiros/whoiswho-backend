@@ -77,7 +77,7 @@ class SocketService {
             const socketToRemove = io.sockets.sockets.get(player.socketId)
 
             if (socketToRemove) {
-                socketToRemove.emit(SocketConst.DISCONNECT_ERROR, 'Você foi removido da sala.')
+                socketToRemove.emit(SocketConst.ERROR, 'Você foi removido da sala.')
                 socketToRemove.leave(room.code)
                 socketToRemove.disconnect()
 

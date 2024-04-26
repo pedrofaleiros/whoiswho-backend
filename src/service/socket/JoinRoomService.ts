@@ -35,7 +35,7 @@ class JoinRoomService extends SocketService {
 
         } catch (error) {
             if (error instanceof SocketError) {
-                socket.emit(SocketConst.DISCONNECT_ERROR, error.message)
+                socket.emit(SocketConst.ERROR, error.message)
             }
             socket.disconnect()
         }
