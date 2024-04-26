@@ -30,10 +30,10 @@ class SocketController {
     async handleConnection(io: Server, socket: Socket) {
 
         // Criar sala
-        socket.on(
-            SocketConst.CREATE_ROOM,
-            async (data) => await this.createRoom.handle(io, socket, data)
-        );
+        // socket.on(
+        //     SocketConst.CREATE_ROOM,
+        //     async (data) => await this.createRoom.handle(io, socket, data)
+        // );
 
         // Entrar na sala
         socket.on(

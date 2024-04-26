@@ -9,13 +9,9 @@ class FinishGameService extends SocketService {
         try {
             const { token } = data
 
-            const userId = getUserId(token)
-            if (typeof userId !== 'string') throw new SocketError('Usuário inválido.');
-            const player = await this.playerR.findById(userId)
-            if (player === null) throw new SocketError('Jogador não encontrado.');
+            const player = await this.validatePlayer(token)
+            const room = await this.validateRoom(player.roomCode)
 
-            const room = await this.roomR.findByCode(player.roomCode)
-            if (room === null) throw new SocketError('Sala não encontrada.');
             if (room.status !== "playing") throw new SocketError('A partida não foi iniciada.');
 
             const updatedRoom = await this.roomR.finishGame(room.code)
