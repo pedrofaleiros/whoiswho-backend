@@ -1,9 +1,9 @@
 import prismaClient from "../prismaClient";
 
 export async function createPlaces() {
-    const count = await prismaClient.place.count()
+    const placesDB = await prismaClient.place.findMany()
 
-    if (count === 0) {
+    if (placesDB.length === 0) {
         console.log('Adicionando locais padrão')
         var places = [..._places]
 

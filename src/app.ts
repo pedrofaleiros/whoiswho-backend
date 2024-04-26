@@ -10,6 +10,7 @@ import { createAdapter } from '@socket.io/redis-adapter'
 import { router } from './routes'
 import SocketController from './controller/SocketController'
 import prismaClient from './utils/prismaClient'
+import { createPlaces } from './utils/routines/createPlaces'
 
 class App {
 
@@ -41,6 +42,7 @@ class App {
         this.server.listen(Env.PORT, async () => {
             console.clear()
             console.log(`running at ${Env.PORT}`)
+            await createPlaces()
         })
     }
 

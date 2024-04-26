@@ -32,8 +32,17 @@ services:
       - postgres
       - redis
     environment:
-      - REDIS_URL=redis://redis:6379
+      - PORT=${PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_URL=${REDIS_URL}
       - DATABASE_URL=${DATABASE_URL}
+
+  react-app:
+    build: ../frontend/
+    depends_on:
+      - node-app
+    ports:
+      - "3000:80"
 
 volumes:
   whoiswho:
