@@ -54,7 +54,7 @@ class AuthService {
         const hashedPassword = await hash(user.password, 8)
 
         // Cria usuario
-        await this.repository.create({
+        return await this.repository.create({
             username: user.username,
             password: hashedPassword,
         })

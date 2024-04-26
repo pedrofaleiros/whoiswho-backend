@@ -16,8 +16,14 @@ class AuthController {
 
     async signup(req: Request, res: Response) {
         const user: UserModel = req.body
-        await this.service.signup(user)
-        return res.sendStatus(StatusCodes.CREATED)
+        const created = await this.service.signup(user)
+
+        const data = await this.service.login({
+            username: created.username,
+            password: user.password,
+        })
+
+        return res.json(data)
     }
 
     async login(req: Request, res: Response) {

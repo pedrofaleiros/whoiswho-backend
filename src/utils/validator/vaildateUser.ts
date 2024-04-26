@@ -17,12 +17,14 @@ function validateUsername(username: any): boolean {
 
 function validatePassword(password: any): boolean {
     if (typeof password !== 'string') return false;
-    if (password.length < 8 || password.length > 64) return false;
-    if (!/\d/.test(password)) return false;
-    if (!/[a-zA-Z]/.test(password)) return false;
+    if (password.length < 6 || password.length > 64) return false;
 
-    const specialCharacters = /[ !@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/;
-    if (!specialCharacters.test(password)) return false;
-    if (/\s/.test(password)) return false;
+    // if (!/\d/.test(password)) return false;
+    // if (!/[a-zA-Z]/.test(password)) return false;
+
+    // const specialCharacters = /[ !@#$%^&*()+\-=\[\]{};':"\\|,.<>\/?]+/;
+    // if (!specialCharacters.test(password)) return false;
+    // if (/\s/.test(password)) return false;
+
     return true;
 }

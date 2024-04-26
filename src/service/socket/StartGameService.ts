@@ -13,9 +13,13 @@ class StartGameService extends SocketService {
             const player = await this.validatePlayer(token);
             const room = await this.validateRoom(player.roomCode)
 
+            if (player.userId !== room.admId) throw new SocketError('Apenas o ADM pode iniciar a partida.');
+
             if (room.status === "playing") throw new SocketError('A partida já foi iniciada.');
 
             const roomPlayers = await this.playerR.listByRoom(room.code)
+
+            if (room.impostors >= roomPlayers.length / 2) throw new SocketError('Impostores devem ser minoria na partida');
 
             // Gera local aleatorio
             const place = await this.getRandomPlace(roomPlayers.length - room.impostors)
@@ -23,6 +27,15 @@ class StartGameService extends SocketService {
             const professions = this.getPlayersProfession(roomPlayers, place.professions, room.impostors);
 
             const updatedRoom = await this.roomR.startGame(room.code, place.placeId, professions)
+
+            // Contagem
+            io.to(room.code).emit('count', "A partida começa em 3")
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            io.to(room.code).emit('count', "A partida começa em 2")
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            io.to(room.code).emit('count', "A partida começa em 1")
+            await new Promise(resolve => setTimeout(resolve, 1000))
+            io.to(room.code).emit('count', "")
 
             await this.roomStatusToAll(io, updatedRoom)
             await this.gameData(io, updatedRoom)

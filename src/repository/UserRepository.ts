@@ -13,7 +13,7 @@ class UserRepository {
     }
 
     async create(user: UserModel) {
-        await prismaClient.user.create({
+        return await prismaClient.user.create({
             data: {
                 username: user.username,
                 password: user.password,
