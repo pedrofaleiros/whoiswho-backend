@@ -6,14 +6,12 @@ class DisconnectService extends SocketService {
     async handle(io: Server, socket: Socket) {
         try {
             const player = await this.playerR.findBySocketId(socket.id)
-            if (player !== null) {
+            if (player) {
                 await this.playerR.removeSocketId(player.userId);
-                const room = await this.roomR.findByCode(player?.roomCode)
-                if (room !== null) {
-                    await this.roomPlayers(io, room)
-                }
+                const room = await this.roomR.findByCode(player.roomCode);
+                if (room) await this.roomPlayers(io, room);
             }
-        } catch (error) { }
+        } catch (_) { }
     }
 }
 
