@@ -16,6 +16,7 @@ router.post('/session', isAuthenticaded, auth.session)
 
 router.get('/place', isAuthenticaded, place.getAll)
 router.post('/room', isAuthenticaded, room.createRoom)
+router.get('/room', isAuthenticaded, room.listRooms)
 
 
 export { router };

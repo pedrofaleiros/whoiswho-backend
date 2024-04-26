@@ -67,6 +67,12 @@ class RoomRepository {
             data: { impostors: num }
         })
     }
+
+    async listRooms() {
+        return await prismaClient.room.findMany({
+            include: { Adm: true }
+        })
+    }
 }
 
 export default RoomRepository;

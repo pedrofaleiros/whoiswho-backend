@@ -12,6 +12,16 @@ class RoomService {
         this.userRepository = new UserRepository()
     }
 
+    async listRooms() {
+        const rooms = await this.repository.listRooms()
+
+        return rooms.map(r => ({
+            roomCode: r.code,
+            adm: r.Adm.username,
+            status: r.status,
+        }))
+    }
+
     async createRoom(userId: string): Promise<string> {
         const user = await this.userRepository.findById(userId)
         if (user === null) throw new ResourceNotFoundError('Usuário não encontrado.')
