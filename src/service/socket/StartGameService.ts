@@ -29,13 +29,7 @@ class StartGameService extends SocketService {
             const updatedRoom = await this.roomR.startGame(room.code, place.placeId, professions)
 
             // Contagem
-            io.to(room.code).emit('count', "A partida começa em 3")
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            io.to(room.code).emit('count', "A partida começa em 2")
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            io.to(room.code).emit('count', "A partida começa em 1")
-            await new Promise(resolve => setTimeout(resolve, 1000))
-            io.to(room.code).emit('count', "")
+            await this.countDown(io, updatedRoom)
 
             await this.roomStatusToAll(io, updatedRoom)
             await this.gameData(io, updatedRoom)

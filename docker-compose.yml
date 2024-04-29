@@ -13,16 +13,12 @@ services:
       POSTGRES_PASSWORD: postgrespassword
     volumes:
       - whoiswho:/var/lib/postgresql/data
-    deploy:
-      resources:
-        limits:
-          cpus: '0.5'
-          memory: '0.5GB'
   
   redis:
     image: redis
     ports:
       - "6379:6379"
+    restart: always
 
   node-app:
     build: .
@@ -37,12 +33,12 @@ services:
       - REDIS_URL=${REDIS_URL}
       - DATABASE_URL=${DATABASE_URL}
 
-  react-app:
-    build: ../frontend/
-    depends_on:
-      - node-app
-    ports:
-      - "3000:80"
+  # react-app:
+  #   build: ../frontend/
+  #   depends_on:
+  #     - node-app
+  #   ports:
+  #     - "3000:80"
 
 volumes:
   whoiswho:

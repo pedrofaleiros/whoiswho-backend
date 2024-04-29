@@ -42,6 +42,16 @@ class SocketService {
         socket.emit(SocketConst.ROOM_CODE, room.code)
     }
 
+    protected async countDown(io: Server, room: Room) {
+        io.to(room.code).emit('count', "A partida começa em 3")
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        io.to(room.code).emit('count', "A partida começa em 2")
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        io.to(room.code).emit('count', "A partida começa em 1")
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        io.to(room.code).emit('count', "")
+    }
+
     protected async roomStatusToAll(io: Server, room: Room) {
         io.to(room.code).emit(SocketConst.GAME_STATUS, room.status)
     }
