@@ -31,8 +31,8 @@ class StartGameService extends SocketService {
             // Contagem
             await this.countDown(io, updatedRoom)
 
-            await this.roomStatusToAll(io, updatedRoom)
             await this.gameData(io, updatedRoom)
+            await this.roomStatusToAll(io, updatedRoom)
 
         } catch (error) {
             if (error instanceof SocketError) {
