@@ -15,6 +15,13 @@ class PlaceRepository {
         return await prismaClient.place.findMany({ include: { Professions: true } })
     }
 
+    async search(text: string) {
+        return await prismaClient.place.findMany({
+            where: { name: { contains: text, mode: "insensitive" } },
+            include: { Professions: true }
+        })
+    }
+
     async getGamePlaces() {
         return await prismaClient.place.findMany({
             include: { Professions: true }

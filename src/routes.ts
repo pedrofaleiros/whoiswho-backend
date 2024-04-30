@@ -14,9 +14,9 @@ router.post('/auth/signup', auth.signup)
 router.post('/auth', auth.login)
 router.post('/session', isAuthenticaded, auth.session)
 
-router.get('/place', isAuthenticaded, place.getAll)
+router.get('/place', isAuthenticaded, place.listPlaces)
 router.post('/place', isAuthenticaded, place.createPlace)
-router.post('/place/profession', isAuthenticaded, place.addProfession)
+router.post('/place/:id/profession', isAuthenticaded, place.addProfession)
 router.delete('/place/:id', isAuthenticaded, place.deletePlace)
 router.delete('/place/profession/:id', isAuthenticaded, place.deleteProfession)
 

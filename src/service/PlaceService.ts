@@ -8,8 +8,12 @@ class PlaceService {
         this.repository = new PlaceRepository()
     }
 
-    async findAll() {
-        return (await this.repository.findAll()).map(p => ({
+    async getPlaces(text: string | null) {
+        var places;
+        if (text === null) places = await this.repository.findAll();
+        else places = await this.repository.search(text);
+
+        return places.map(p => ({
             id: p.id,
             name: p.name,
             professions: p.Professions.map(prof => ({

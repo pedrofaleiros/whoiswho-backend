@@ -8,15 +8,16 @@ class PlaceController {
 
     constructor() {
         this.service = new PlaceService()
-        this.getAll = this.getAll.bind(this)
+        this.listPlaces = this.listPlaces.bind(this)
         this.createPlace = this.createPlace.bind(this)
         this.addProfession = this.addProfession.bind(this)
         this.deletePlace = this.deletePlace.bind(this)
         this.deleteProfession = this.deleteProfession.bind(this)
     }
 
-    async getAll(req: Request, res: Response) {
-        const data = await this.service.findAll();
+    async listPlaces(req: Request, res: Response) {
+        const { name } = req.query
+        const data = await this.service.getPlaces(typeof name === 'string' ? name : null);
         return res.json(data)
     }
 
@@ -26,7 +27,8 @@ class PlaceController {
     }
 
     async addProfession(req: Request, res: Response) {
-        const { name, placeId } = req.body
+        const { name } = req.body
+        const { placeId } = req.params
         return res.json(await this.service.addProfession(name, placeId))
     }
 
