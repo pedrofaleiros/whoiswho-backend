@@ -458,4 +458,13 @@ var _places: Place[] = [
         new Profession("Pai de família"),
         new Profession("Desempregado"),
       ]),
+      new Place("Todo mundo odeia o Chris", [
+        new Profession("Chris"),
+        new Profession("Julius"),
+        new Profession("Rochelle"),
+        new Profession("Greg"),
+        new Profession("Caruso"),
+        new Profession("Tasha"),
+        new Profession("Tonya"),
+      ]),
 ];
