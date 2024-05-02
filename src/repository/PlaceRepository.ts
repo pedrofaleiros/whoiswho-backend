@@ -12,13 +12,17 @@ class PlaceRepository {
     }
 
     async findAll() {
-        return await prismaClient.place.findMany({ include: { Professions: true } })
+        return await prismaClient.place.findMany({
+            include: { Professions: true },
+            orderBy: { name: "asc" }
+        },)
     }
 
     async search(text: string) {
         return await prismaClient.place.findMany({
             where: { name: { contains: text, mode: "insensitive" } },
-            include: { Professions: true }
+            include: { Professions: true },
+            orderBy: { name: "asc" }
         })
     }
 
