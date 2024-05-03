@@ -22,5 +22,6 @@ router.delete('/place/profession/:id', isAuthenticaded, place.deleteProfession)
 
 router.post('/room', isAuthenticaded, room.createRoom)
 router.get('/room', isAuthenticaded, room.listRooms)
+router.get('/room/last', isAuthenticaded, room.findUserRoom)
 
 export { router };

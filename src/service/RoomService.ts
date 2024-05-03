@@ -12,6 +12,10 @@ class RoomService {
         this.userRepository = new UserRepository()
     }
 
+    async findUserRoom(userId: string) {
+        return await this.repository.findUserRoom(userId)
+    }
+
     async listRooms() {
         const rooms = await this.repository.listRooms()
 
