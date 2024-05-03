@@ -13,7 +13,17 @@ class RoomService {
     }
 
     async findUserRoom(userId: string) {
-        return await this.repository.findUserRoom(userId)
+        const room = await this.repository.findUserRoom(userId)
+
+        if (room === null) return null;
+
+        const now = new Date()
+
+        const dif = this.dateDif(room.createdAt, now)
+
+        if(dif > 60) return null
+
+        return room.code
     }
 
     async listRooms() {
@@ -39,6 +49,12 @@ class RoomService {
         })
 
         return room.code
+    }
+
+    private dateDif(startDate: Date, finalDate: Date): number {
+        const dif = finalDate.getTime() - startDate.getTime();
+        const difMin = dif / (1000 * 60);
+        return difMin;
     }
 
     private async getRoomCode(): Promise<string> {

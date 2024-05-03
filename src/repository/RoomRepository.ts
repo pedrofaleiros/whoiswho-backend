@@ -74,12 +74,12 @@ class RoomRepository {
         })
     }
 
-    async findUserRoom(userId: string): Promise<string | null> {
+    async findUserRoom(userId: string): Promise<Room | null> {
         const player = await prismaClient.player.findUnique({ where: { userId: userId } })
         if (player === null) return null;
         const room = await prismaClient.room.findUnique({ where: { code: player.roomCode } })
         if (room === null) return null;
-        return room.code
+        return room
     }
 }
 
