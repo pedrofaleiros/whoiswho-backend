@@ -16,6 +16,7 @@ model User {
   Player Player?
 
   Rooms Room[]
+  Place Place[]
 }
 
 enum GameStatus {
@@ -86,6 +87,9 @@ model Place {
 
   placeCategoryId String?
   PlaceCategory   PlaceCategory? @relation(fields: [placeCategoryId], references: [id], onDelete: Cascade)
+
+  userId String?
+  User   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   Rooms Room[]
 }

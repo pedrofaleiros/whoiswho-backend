@@ -22,14 +22,21 @@ class PlaceController {
     }
 
     async createPlace(req: Request, res: Response) {
-        const { name } = req.body
-        return res.json(await this.service.createPlace(name))
+        const { name, categoryId } = req.body
+        const userId = req.user_id
+        await this.service.createPlace({
+            name: name,
+            categoryId: categoryId ?? null,
+            userId: userId,
+        })
+        return res.sendStatus(StatusCodes.CREATED)
     }
 
     async addProfession(req: Request, res: Response) {
+        const userId = req.user_id
         const { name } = req.body
         const { placeId } = req.params
-        return res.json(await this.service.addProfession(name, placeId))
+        return res.json(await this.service.addProfession(name, placeId, userId))
     }
 
     async deletePlace(req: Request, res: Response) {

@@ -12,7 +12,7 @@ export async function deleteRooms() {
         orderBy: {createdAt: "asc"}
     });
 
-    console.log(`\n Deletando ${rooms.length} salas criadas antes de: ${time}\n`)
+    console.log(`Deletando ${rooms.length} salas criadas antes de: ${time}\n`)
     rooms.forEach(r => {
         console.log(`${r.code}: ${r.createdAt}`)
     })

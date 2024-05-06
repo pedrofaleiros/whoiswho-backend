@@ -1,5 +1,6 @@
 import { Place } from "@prisma/client";
 import prismaClient from "../utils/prismaClient";
+import { PlaceModel } from "../model/PlaceModel";
 
 class PlaceRepository {
 
@@ -15,7 +16,15 @@ class PlaceRepository {
         return await prismaClient.place.findMany({
             include: { Professions: true },
             orderBy: { name: "asc" }
-        },)
+        })
+    }
+
+    async findAllByCategory(id: string) {
+        return await prismaClient.place.findMany({
+            where: { placeCategoryId: id },
+            include: { Professions: true },
+            orderBy: { name: "asc" }
+        })
     }
 
     async search(text: string) {
@@ -32,8 +41,14 @@ class PlaceRepository {
         })
     }
 
-    async createPlace(name: string) {
-        return await prismaClient.place.create({ data: { name: name } })
+    async createPlace(place: PlaceModel) {
+        return await prismaClient.place.create({
+            data: {
+                name: place.name,
+                placeCategoryId: place.categoryId,
+                userId: place.userId,
+            }
+        })
     }
 
     async addProfession(name: string, placeId: string) {

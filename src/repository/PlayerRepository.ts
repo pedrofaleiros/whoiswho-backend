@@ -45,9 +45,7 @@ class PlayerRepository {
     async listPlayerProfessions(roomCode: string) {
         return await prismaClient.playerProfession.findMany({
             where: { roomCode: roomCode },
-            include: {
-                player: true
-            }
+            include: { player: true }
         })
     }
 

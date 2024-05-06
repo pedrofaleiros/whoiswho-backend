@@ -1,11 +1,15 @@
+import { PlaceModel } from "../model/PlaceModel";
+import CategoryRepository from "../repository/CategoryRepository";
 import PlaceRepository from "../repository/PlaceRepository"
 import { ResourceNotFoundError, ValidationError } from "../utils/errors"
 
 class PlaceService {
     private repository: PlaceRepository
+    private categoryRepository: CategoryRepository
 
     constructor() {
         this.repository = new PlaceRepository()
+        this.categoryRepository = new CategoryRepository()
     }
 
     async getPlaces(text: string | null) {
@@ -23,16 +27,23 @@ class PlaceService {
         }))
     }
 
-    async createPlace(name: string) {
-        if (typeof name !== 'string' || name.length > 64 || name.length < 3)
+    async createPlace(place: PlaceModel) {
+        if (typeof place.name !== 'string' || place.name.length > 64 || place.name.length < 3)
             throw new ValidationError('Nome inválido.');
 
-        return await this.repository.createPlace(name)
+        if (place.categoryId !== null) {
+            const category = await this.categoryRepository.findById(place.categoryId)
+            if (category === null)
+                throw new ResourceNotFoundError('Categoria não encontrada');
+        }
+
+        return await this.repository.createPlace(place)
     }
 
-    async addProfession(name: string, placeId: string) {
+    async addProfession(name: string, placeId: string, userId: string) {
         const place = await this.repository.findById(placeId)
-        if (!place) throw new ResourceNotFoundError('Local não encontrado.');
+        if (!place || place.userId !== userId)
+            throw new ResourceNotFoundError('Local não encontrado.');
 
         if (typeof name !== 'string' || name.length > 64 || name.length < 3)
             throw new ValidationError('Nome inválido.');
