@@ -2,13 +2,12 @@ import { Server, Socket } from "socket.io";
 import SocketService from "./SocketService";
 import { SocketError } from "../../utils/errors";
 import { SocketConst } from "../../utils/SocketConstants";
-import PlaceRepository from "../../repository/PlaceRepository";
-import { Player } from "@prisma/client";
+import { PlaceCategory, Player } from "@prisma/client";
 
 class StartGameService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {
         try {
-            const { token } = data
+            const { token, categoryId } = data
 
             const player = await this.validatePlayer(token);
             const room = await this.validateRoom(player.roomCode)
@@ -21,15 +20,18 @@ class StartGameService extends SocketService {
 
             if (room.impostors >= roomPlayers.length / 2) throw new SocketError('Impostores devem ser minoria na partida');
 
+            var category: PlaceCategory | null = null
+            if (typeof categoryId === 'string') category = await this.categoryR.findById(categoryId);
+
             // Gera local aleatorio
-            const place = await this.getRandomPlace(roomPlayers.length - room.impostors)
+            const place = await this.getRandomPlace(roomPlayers.length - room.impostors, category?.id ?? null)
             // Gera profissoes aleatorias
             const professions = this.getPlayersProfession(roomPlayers, place.professions, room.impostors);
 
-            const updatedRoom = await this.roomR.startGame(room.code, place.placeId, professions)
-
             // Contagem
-            await this.countDown(io, updatedRoom)
+            await this.countDown(io, room)
+
+            const updatedRoom = await this.roomR.startGame(room.code, place.placeId, professions)
 
             await this.gameData(io, updatedRoom)
             await this.roomStatusToAll(io, updatedRoom)
@@ -41,14 +43,15 @@ class StartGameService extends SocketService {
         }
     }
 
-    private async getRandomPlace(num: number): Promise<GamePlace> {
-        // Todos os places
-        const aux = await new PlaceRepository().getGamePlaces()
+    private async getRandomPlace(num: number, categoryId: string | null): Promise<GamePlace> {
+        const aux = await this.placeR.getGamePlaces(categoryId)
+
         const places = this.shuffleArray(aux)
 
         // Filtra apenas os que possuem pelo menos N professions
         const validPlaces = places.filter(p => p.Professions.length >= num)
-        if (validPlaces.length === 0) throw new SocketError('Nenhum local para essa quantidade de jogadores');
+        if (validPlaces.length === 0)
+            throw new SocketError('Nenhum local para essa quantidade de jogadores / impostores');
 
         const index = Math.floor(Math.random() * validPlaces.length)
         const place = validPlaces[index]

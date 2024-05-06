@@ -3,10 +3,12 @@ import AuthController from "./controller/AuthController";
 import PlaceController from "./controller/PlaceController";
 import { isAuthenticaded } from "./utils/middlewares/isAuthenticated";
 import RoomController from "./controller/RoomController";
+import CategoryController from "./controller/CategoryController";
 
 const auth = new AuthController();
 const place = new PlaceController()
 const room = new RoomController()
+const category = new CategoryController()
 
 const router = Router();
 
@@ -19,6 +21,8 @@ router.post('/place', isAuthenticaded, place.createPlace)
 router.post('/place/:id/profession', isAuthenticaded, place.addProfession)
 router.delete('/place/:id', isAuthenticaded, place.deletePlace)
 router.delete('/place/profession/:id', isAuthenticaded, place.deleteProfession)
+
+router.get('/category', isAuthenticaded, category.listAll)
 
 router.post('/room', isAuthenticaded, room.createRoom)
 router.get('/room', isAuthenticaded, room.listRooms)

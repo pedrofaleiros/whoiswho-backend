@@ -35,8 +35,9 @@ class PlaceRepository {
         })
     }
 
-    async getGamePlaces() {
+    async getGamePlaces(categoryId: string | null) {
         return await prismaClient.place.findMany({
+            where: { placeCategoryId: categoryId },
             include: { Professions: true }
         })
     }

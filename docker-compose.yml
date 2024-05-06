@@ -20,18 +20,18 @@ services:
       - "6379:6379"
     restart: always
 
-  # node-app:
-  #   build: .
-  #   ports:
-  #     - "8080:3000"
-  #   depends_on:
-  #     - postgres
-  #     - redis
-  #   environment:
-  #     - PORT=${PORT}
-  #     - JWT_SECRET=${JWT_SECRET}
-  #     - REDIS_URL=${REDIS_URL}
-  #     - DATABASE_URL=${DATABASE_URL}
+  node-app:
+    build: .
+    ports:
+      - "8080:3000"
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - PORT=${PORT}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_URL=${REDIS_URL}
+      - DATABASE_URL=${DATABASE_URL}
 
   # react-app:
   #   build: ../frontend/

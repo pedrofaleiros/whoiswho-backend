@@ -7,18 +7,21 @@ import PlayerRepository from "../../repository/PlayerRepository"
 import PlaceRepository from "../../repository/PlaceRepository"
 import { SocketError } from "../../utils/errors"
 import getUserId from "../../utils/getUserId"
+import CategoryRepository from "../../repository/CategoryRepository"
 
 class SocketService {
     protected userR: UserRepository
     protected roomR: RoomRepository
     protected playerR: PlayerRepository
     protected placeR: PlaceRepository
+    protected categoryR: CategoryRepository
 
     constructor() {
         this.userR = new UserRepository()
         this.roomR = new RoomRepository()
         this.playerR = new PlayerRepository()
         this.placeR = new PlaceRepository()
+        this.categoryR = new CategoryRepository()
     }
 
     protected async gameData(io: Server, room: Room) {
