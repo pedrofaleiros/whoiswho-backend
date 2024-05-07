@@ -21,6 +21,12 @@ class PlaceController {
         return res.json(data)
     }
 
+    async listPlacesByCategory(req: Request, res: Response) {
+        const { id } = req.params
+        const data = await this.service.getPlacesByCategory(id);
+        return res.json(data)
+    }
+
     async createPlace(req: Request, res: Response) {
         const { name, categoryId } = req.body
         const userId = req.user_id

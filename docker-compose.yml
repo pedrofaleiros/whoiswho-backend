@@ -13,12 +13,22 @@ services:
       POSTGRES_PASSWORD: postgrespassword
     volumes:
       - whoiswho:/var/lib/postgresql/data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '0.5GB'
   
   redis:
     image: redis
     ports:
       - "6379:6379"
     restart: always
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '0.5GB'
 
   node-app:
     build: .

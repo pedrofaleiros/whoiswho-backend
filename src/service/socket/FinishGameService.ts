@@ -11,6 +11,8 @@ class FinishGameService extends SocketService {
             const player = await this.validatePlayer(token)
             const room = await this.validateRoom(player.roomCode)
 
+            if (room.admId !== player.userId) throw new SocketError('Apenas o ADM pode finalizar a partida.');
+
             if (room.status !== "playing") throw new SocketError('A partida não foi iniciada.');
 
             const updatedRoom = await this.roomR.finishGame(room.code)

@@ -27,6 +27,23 @@ class PlaceService {
         }))
     }
 
+    async getPlacesByCategory(categoryId: string) {
+        if (typeof categoryId !== 'string') throw new ValidationError('Categoria inválida.')
+
+        const category = await this.categoryRepository.findById(categoryId)
+        if (category === null) throw new ValidationError('Categoria inválida.')
+
+        const places = await this.repository.findAllByCategory(category.id)
+        return places.map(p => ({
+            id: p.id,
+            name: p.name,
+            professions: p.Professions.map(prof => ({
+                id: prof.id,
+                name: prof.name,
+            }))
+        }))
+    }
+
     async createPlace(place: PlaceModel) {
         if (typeof place.name !== 'string' || place.name.length > 64 || place.name.length < 3)
             throw new ValidationError('Nome inválido.');

@@ -28,7 +28,6 @@ class StartGameService extends SocketService {
             // Gera profissoes aleatorias
             const professions = this.getPlayersProfession(roomPlayers, place.professions, room.impostors);
 
-            // Contagem
             await this.countDown(io, room)
 
             const updatedRoom = await this.roomR.startGame(room.code, place.placeId, professions)
