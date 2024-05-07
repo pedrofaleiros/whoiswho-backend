@@ -43,7 +43,7 @@ class App {
         this.server.listen(Env.PORT, async () => {
             console.clear()
             await createPlaces()
-            await deleteRooms()
+            await deleteRooms(12)
             console.log(`\nrunning at ${Env.PORT}`)
         })
     }
