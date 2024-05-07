@@ -9,6 +9,7 @@ class PlaceController {
     constructor() {
         this.service = new PlaceService()
         this.listPlaces = this.listPlaces.bind(this)
+        this.listPlacesByCategory = this.listPlacesByCategory.bind(this)
         this.createPlace = this.createPlace.bind(this)
         this.addProfession = this.addProfession.bind(this)
         this.deletePlace = this.deletePlace.bind(this)
