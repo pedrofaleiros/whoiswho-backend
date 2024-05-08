@@ -10,6 +10,7 @@ class PlaceController {
         this.service = new PlaceService()
         this.listPlaces = this.listPlaces.bind(this)
         this.listPlacesByCategory = this.listPlacesByCategory.bind(this)
+        this.listUserPlaces = this.listUserPlaces.bind(this)
         this.createPlace = this.createPlace.bind(this)
         this.addProfession = this.addProfession.bind(this)
         this.deletePlace = this.deletePlace.bind(this)
@@ -25,6 +26,12 @@ class PlaceController {
     async listPlacesByCategory(req: Request, res: Response) {
         const { id } = req.params
         const data = await this.service.getPlacesByCategory(id);
+        return res.json(data)
+    }
+
+    async listUserPlaces(req: Request, res: Response) {
+        const userId = req.user_id
+        const data = await this.service.getPlacesByUser(userId);
         return res.json(data)
     }
 

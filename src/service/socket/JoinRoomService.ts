@@ -32,6 +32,7 @@ class JoinRoomService extends SocketService {
             this.roomImpostors(socket, room)
             await this.roomPlayers(io, room)
             await this.gameData(io, room)
+            await this.roomCategory(socket, room)
 
         } catch (error) {
             if (error instanceof SocketError) {

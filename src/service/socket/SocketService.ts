@@ -67,6 +67,16 @@ class SocketService {
         io.to(room.code).emit(SocketConst.GAME_IMPOSTORS, room.impostors)
     }
 
+    protected async roomCategoryToAll(io: Server, room: Room) {
+        const cat = await this.categoryR.findById(room.placeCategoryId ?? "")
+        io.to(room.code).emit(SocketConst.GAME_CATEGORY, cat === null ? null : cat.name)
+    }
+
+    protected async roomCategory(socket: Socket, room: Room) {
+        const cat = await this.categoryR.findById(room.placeCategoryId ?? "")
+        socket.emit(SocketConst.GAME_CATEGORY, cat === null ? null : cat.name)
+    }
+
     protected async roomImpostors(socket: Socket, room: Room) {
         socket.emit(SocketConst.GAME_IMPOSTORS, room.impostors)
     }

@@ -27,6 +27,14 @@ class PlaceRepository {
         })
     }
 
+    async findAllByUser(id: string) {
+        return await prismaClient.place.findMany({
+            where: { userId: id },
+            include: { Professions: true },
+            orderBy: { name: "asc" }
+        })
+    }
+
     async search(text: string) {
         return await prismaClient.place.findMany({
             where: { name: { contains: text, mode: "insensitive" } },

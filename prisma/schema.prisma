@@ -41,6 +41,9 @@ model Room {
   Players           Player[]
   PlayerProfessions PlayerProfession[]
 
+  placeCategoryId String?
+  Category        PlaceCategory? @relation(fields: [placeCategoryId], references: [id], onDelete: SetNull)
+
   createdAt DateTime @default(now())
 }
 
@@ -78,6 +81,7 @@ model PlaceCategory {
   name        String
   description String?
   Places      Place[]
+  Room        Room[]
 }
 
 model Place {

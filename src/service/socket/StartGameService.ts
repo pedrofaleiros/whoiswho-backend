@@ -7,7 +7,7 @@ import { PlaceCategory, Player } from "@prisma/client";
 class StartGameService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {
         try {
-            const { token, categoryId } = data
+            const { token } = data
 
             const player = await this.validatePlayer(token);
             const room = await this.validateRoom(player.roomCode)
@@ -20,8 +20,7 @@ class StartGameService extends SocketService {
 
             if (room.impostors >= roomPlayers.length / 2) throw new SocketError('Impostores devem ser minoria na partida');
 
-            var category: PlaceCategory | null = null
-            if (typeof categoryId === 'string') category = await this.categoryR.findById(categoryId);
+            var category = await this.categoryR.findById(room.placeCategoryId ?? "");
 
             // Gera local aleatorio
             const place = await this.getRandomPlace(roomPlayers.length - room.impostors, category?.id ?? null)

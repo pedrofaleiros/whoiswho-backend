@@ -68,6 +68,13 @@ class RoomRepository {
         })
     }
 
+    async setCategory(code: string, categoryId: string | null) {
+        return await prismaClient.room.update({
+            where: { code: code },
+            data: { placeCategoryId: categoryId }
+        })
+    }
+
     async listRooms() {
         return await prismaClient.room.findMany({
             include: { Adm: true }
