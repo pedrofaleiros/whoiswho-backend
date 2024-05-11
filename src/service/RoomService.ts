@@ -21,7 +21,7 @@ class RoomService {
 
         const dif = this.dateDif(room.createdAt, now)
 
-        if(dif > 60) return null
+        if(dif > 60 * 5) return null
 
         return room.code
     }
