@@ -32,4 +32,8 @@ router.post('/room', isAuthenticaded, room.createRoom)
 router.get('/room', isAuthenticaded, room.listRooms)
 router.get('/room/last', isAuthenticaded, room.findUserRoom)
 
+router.get("/", (req, res) => {
+    return res.json({ status: "Ok" })
+})
+
 export { router };
