@@ -2,7 +2,6 @@ import { Server, Socket } from "socket.io";
 import { SocketConst } from "../utils/SocketConstants";
 import JoinRoomService from "../service/socket/JoinRoomService";
 import DisconnectService from "../service/socket/DisconnectService";
-import LeaveAllService from "../service/socket/LeaveAllService";
 import SetImpostorsService from "../service/socket/SetImpostorsService";
 import StartGameService from "../service/socket/StartGameService";
 import FinishGameService from "../service/socket/FinishGameService";
@@ -11,7 +10,6 @@ class SocketController {
 
     private joinRoom: JoinRoomService
     private disconnect: DisconnectService
-    private leaveAll: LeaveAllService
     private setImpostors: SetImpostorsService
     private startGame: StartGameService
     private finishGame: FinishGameService
@@ -20,7 +18,6 @@ class SocketController {
     constructor() {
         this.joinRoom = new JoinRoomService()
         this.disconnect = new DisconnectService()
-        this.leaveAll = new LeaveAllService()
         this.setImpostors = new SetImpostorsService()
         this.startGame = new StartGameService()
         this.finishGame = new FinishGameService()
@@ -56,10 +53,6 @@ class SocketController {
         socket.on(
             SocketConst.FINISH_GAME,
             async (data) => await this.finishGame.handle(io, socket, data)
-        )
-
-        socket.on('leaveAll',
-            async (data) => await this.leaveAll.handle(io, socket, data)
         )
     }
 }

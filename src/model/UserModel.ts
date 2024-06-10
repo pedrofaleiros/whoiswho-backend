@@ -1,6 +1,6 @@
 interface UserModel {
     username: string
-    password: string
+    // password: string
 }
 
 export { UserModel }

@@ -1,10 +1,9 @@
-import { hash } from "bcryptjs"
+// import { hash } from "bcryptjs"
+// import { UserModel } from "../model/UserModel"
+// import { verifyPassword } from "../utils/verifyPassword"
+// import { getJWT } from "../utils/getJWT"
 import UserRepository from "../repository/UserRepository"
-import { UserModel } from "../model/UserModel"
-import { verifyPassword } from "../utils/verifyPassword"
-import { getJWT } from "../utils/getJWT"
 import { ResourceNotFoundError, UsecaseError, ValidationError } from "../utils/errors"
-import validateUser from "../utils/validator/vaildateUser"
 
 class AuthService {
 
@@ -14,51 +13,69 @@ class AuthService {
         this.repository = new UserRepository()
     }
 
-    async session(userId: string) {
-        const user = await this.repository.findById(userId)
-        if (user === null) throw new ResourceNotFoundError('Usuário não encontrado.');
-        return {
-            id: user.id,
-            username: user.username,
-            token: getJWT(user.id, user.username),
-        }
-    }
-
-    async login(user: UserModel) {
-        if (typeof user.username !== "string") throw new ValidationError("Username inválido.")
-        if (typeof user.password !== "string") throw new ValidationError("Senha inválida.")
-
-        // Verifica se o usuario existe
-        const findUser = await this.repository.findByUsername(user.username)
-        if (findUser == null) throw new ResourceNotFoundError('Usuário não encontrado.');
-
-        await verifyPassword(user.password, findUser.password)
-
-        const token = getJWT(findUser.id, findUser.username)
-
-        return {
-            id: findUser.id,
-            username: findUser.username,
-            token: token,
-        }
-    }
-
-    async signup(user: UserModel) {
-        validateUser(user);
-
-        // Verifica se username já está cadastrado
-        const findUsername = await this.repository.findByUsername(user.username)
-        if (findUsername != null) throw new UsecaseError('Username já cadastrado.')
-
-        // Faz o hash da senha
-        const hashedPassword = await hash(user.password, 8)
-
-        // Cria usuario
+    async createUser() {
+        const username = await this.generateUsername();
         return await this.repository.create({
-            username: user.username,
-            password: hashedPassword,
+            username: username
         })
     }
+
+    async session(userId: string) {
+        if (typeof userId !== 'string') throw new ValidationError('Usuário inválido');
+        const user = await this.repository.findById(userId)
+        if (user === null) {
+            throw new ResourceNotFoundError('Usuário não encontrado')
+        }
+        return user
+    }
+
+    async updateUsername(userId: string, username: string) {
+        const findUserById = await this.repository.findById(userId)
+        if (findUserById === null) throw new ResourceNotFoundError("Usuário não encontrado");
+
+        this.validateUsername(username)
+
+        const findUserByUsername = await this.repository.findByUsername(username)
+        if (findUserByUsername !== null && findUserByUsername.id !== findUserById.id) {
+            throw new UsecaseError("Nome de usuário já utilizado.");
+        }
+
+        return await this.repository.updateUsername(findUserById.id, username);
+    }
+
+    private async generateUsername(): Promise<string> {
+        var username = this.generateCode();
+        while (await this.repository.findByUsername(username) !== null) {
+            username = this.generateCode();
+        }
+        return username;
+    }
+
+    private generateCode(): string {
+        const randomNumber = Math.floor(Math.random() * 10000);
+        const randomNumberString = randomNumber.toString().padStart(4, '0');
+        return `User${randomNumberString}`;
+    }
+
+    private validateUsername(username: any) {
+        if (typeof username !== 'string' || username.length < 3 || username.length > 64) {
+            throw new ValidationError("Nome de usuário inválido.");
+        }
+    }
+
+    // async login(userId: string, username: string) {
+    //     if (typeof username !== "string") throw new ValidationError("Username inválido.")
+    //     const findUserById = await this.repository.findById(userId)
+    //     if (findUserById == null) throw new ResourceNotFoundError('Usuário não encontrado.');
+    //     const findUserByUsername = await this.repository.findByUsername(username)
+    //     if (findUserByUsername == null) throw new ResourceNotFoundError('Usuário não encontrado.');
+    //     const token = getJWT(findUserById.id, findUserById.username)
+    //     return {
+    //         id: findUserById.id,
+    //         username: findUserById.username,
+    //         token: token,
+    //     }
+    // }
 }
 
 export default AuthService

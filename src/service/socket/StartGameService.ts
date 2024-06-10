@@ -7,9 +7,9 @@ import { PlaceCategory, Player } from "@prisma/client";
 class StartGameService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {
         try {
-            const { token } = data
+            const { userId } = data
 
-            const player = await this.validatePlayer(token);
+            const player = await this.validatePlayer(userId);
             const room = await this.validateRoom(player.roomCode)
 
             if (player.userId !== room.admId) throw new SocketError('Apenas o ADM pode iniciar a partida.');
@@ -84,11 +84,13 @@ class StartGameService extends SocketService {
 
         // Embaralha profissoes
         const shuffle = this.shuffleArray(professions)
+        const array = [...shuffle]
+        // const array = [...shuffle, ...shuffle] // Repetindo Profissoes
 
         // Atribui funcoes
         for (let i = 0; i < list.length; i++) {
             if (!list[i].isImpostor) {
-                list[i].profession = shuffle[i]
+                list[i].profession = array.pop() ?? ""
             }
         }
         return list

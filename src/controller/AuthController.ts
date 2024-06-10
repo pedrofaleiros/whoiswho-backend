@@ -1,6 +1,4 @@
 import { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
-import { UserModel } from "../model/UserModel";
 import AuthService from "../service/AuthService";
 
 class AuthController {
@@ -9,32 +7,27 @@ class AuthController {
 
     constructor() {
         this.service = new AuthService()
-        this.login = this.login.bind(this)
-        this.signup = this.signup.bind(this)
-        this.session = this.session.bind(this)
-    }
-
-    async signup(req: Request, res: Response) {
-        const user: UserModel = req.body
-        const created = await this.service.signup(user)
-
-        const data = await this.service.login({
-            username: created.username,
-            password: user.password,
-        })
-
-        return res.json(data)
-    }
-
-    async login(req: Request, res: Response) {
-        const user: UserModel = req.body
-        const data = await this.service.login(user)
-        return res.json(data)
+        this.session = this.session.bind(this);
+        this.createUser = this.createUser.bind(this);
+        this.setUsername = this.setUsername.bind(this);
     }
 
     async session(req: Request, res: Response) {
-        const data = await this.service.session(req.user_id)
+        const { userId } = req.params;
+        const data = await this.service.session(userId)
         return res.json(data)
+    }
+
+    async createUser(_: Request, res: Response) {
+        const user = await this.service.createUser();
+        return res.json(user);
+    }
+
+    async setUsername(req: Request, res: Response) {
+        const { userId } = req.params;
+        const { username } = req.body;
+        const user = await this.service.updateUsername(userId, username);
+        return res.json(user);
     }
 }
 

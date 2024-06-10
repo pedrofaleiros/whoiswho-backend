@@ -30,14 +30,14 @@ class PlaceController {
     }
 
     async listUserPlaces(req: Request, res: Response) {
-        const userId = req.user_id
+        const { userId } = req.params
         const data = await this.service.getPlacesByUser(userId);
         return res.json(data)
     }
 
     async createPlace(req: Request, res: Response) {
         const { name, categoryId } = req.body
-        const userId = req.user_id
+        const { userId } = req.params
         await this.service.createPlace({
             name: name,
             categoryId: categoryId ?? null,
@@ -47,7 +47,7 @@ class PlaceController {
     }
 
     async addProfession(req: Request, res: Response) {
-        const userId = req.user_id
+        const { userId } = req.params
         const { name } = req.body
         const { placeId } = req.params
         return res.json(await this.service.addProfession(name, placeId, userId))

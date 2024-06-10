@@ -12,25 +12,24 @@ const category = new CategoryController()
 
 const router = Router();
 
-router.post('/auth/signup', auth.signup)
-router.post('/auth', auth.login)
-router.post('/session', isAuthenticaded, auth.session)
+router.post('/auth', auth.createUser)
+router.post('/auth/session/:userId', auth.session)
+router.put('/auth/:userId', auth.setUsername)
 
-router.get('/place', isAuthenticaded, place.listPlaces)
-router.get('/place/category/:id', isAuthenticaded, place.listPlacesByCategory)
-router.get('/place/user', isAuthenticaded, place.listUserPlaces)
+router.post('/room/:userId', room.createRoom)
+router.get('/room/last/:userId', room.findUserRoom)
+// router.get('/room', room.listRooms)
+// --------------------------------------------------
 
-router.post('/place', isAuthenticaded, place.createPlace)
-router.post('/place/:id/profession', isAuthenticaded, place.addProfession)
+router.get('/place', place.listPlaces)
+router.get('/place/category/:id', place.listPlacesByCategory)
+router.get('/place/user/:userId', place.listUserPlaces)
 
-router.delete('/place/:id', isAuthenticaded, place.deletePlace)
-router.delete('/place/profession/:id', isAuthenticaded, place.deleteProfession)
-
-router.get('/category', isAuthenticaded, category.listAll)
-
-router.post('/room', isAuthenticaded, room.createRoom)
-router.get('/room', isAuthenticaded, room.listRooms)
-router.get('/room/last', isAuthenticaded, room.findUserRoom)
+router.post('/place/:userId', place.createPlace)
+router.post('/place/:id/profession/:userId', place.addProfession)
+router.delete('/place/:id', place.deletePlace)
+router.delete('/place/profession/:id', place.deleteProfession)
+router.get('/category', category.listAll)
 
 router.get("/", (req, res) => {
     return res.json({ status: "Ok" })

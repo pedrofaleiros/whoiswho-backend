@@ -6,9 +6,9 @@ import { SocketConst } from "../../utils/SocketConstants";
 class FinishGameService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {
         try {
-            const { token } = data
+            const { userId } = data
 
-            const player = await this.validatePlayer(token)
+            const player = await this.validatePlayer(userId)
             const room = await this.validateRoom(player.roomCode)
 
             if (room.admId !== player.userId) throw new SocketError('Apenas o ADM pode finalizar a partida.');

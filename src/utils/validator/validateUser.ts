@@ -1,12 +1,12 @@
 import { UserModel } from "../../model/UserModel";
 import { ValidationError } from "../errors";
 
-export default function validateUser(user: UserModel) {
-    if (!validateUsername(user.username))
-        throw new ValidationError('Username inválido.');
-    if (!validatePassword(user.password))
-        throw new ValidationError('Senha inválida.');
-}
+// export default function validateUser(user: UserModel) {
+//     if (!validateUsername(user.username))
+//         throw new ValidationError('Username inválido.');
+//     if (!validatePassword(user.password))
+//         throw new ValidationError('Senha inválida.');
+// }
 
 function validateUsername(username: any): boolean {
     if (typeof username !== 'string' || username.length < 3 || username.length > 64) {

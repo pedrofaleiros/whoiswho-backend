@@ -6,9 +6,9 @@ import { SocketConst } from "../../utils/SocketConstants";
 class SetImpostorsService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {
         try {
-            const { token, num, roomCode } = data
+            const { userId, num, roomCode } = data
 
-            const user = await this.validateUser(token)
+            const user = await this.validateUser(userId)
             const room = await this.validateRoom(roomCode)
 
             if (user.id !== room.admId) throw new SocketError('Não autorizado');

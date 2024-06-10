@@ -12,12 +12,16 @@ class UserRepository {
         return await prismaClient.user.findUnique({ where: { username: username } })
     }
 
+    async updateUsername(id: string, username: string) {
+        return await prismaClient.user.update({
+            where: { id: id },
+            data: { username: username }
+        })
+    }
+
     async create(user: UserModel) {
         return await prismaClient.user.create({
-            data: {
-                username: user.username,
-                password: user.password,
-            }
+            data: { username: user.username }
         })
     }
 }

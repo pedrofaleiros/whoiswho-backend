@@ -6,9 +6,9 @@ import { SocketConst } from "../../utils/SocketConstants";
 class JoinRoomService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {
         try {
-            const { roomCode, token } = data
+            const { roomCode, userId } = data
 
-            const user = await this.validateUser(token);
+            const user = await this.validateUser(userId);
             const room = await this.validateRoom(roomCode);
 
             // Verifica se o usuario ja esta ativo em uma sala

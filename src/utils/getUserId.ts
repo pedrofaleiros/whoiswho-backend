@@ -1,20 +1,20 @@
-import { verify } from "jsonwebtoken";
-import Env from "../env";
+// import { verify } from "jsonwebtoken";
+// import Env from "../env";
 
-interface PayLoad {
-    sub: string;
-}
+// interface PayLoad {
+//     sub: string;
+// }
 
-export default function getUserId(token: string): string | null {
-    try {
+// export default function getUserId(token: string): string | null {
+//     try {
 
-        const { sub } = verify(
-            token,
-            Env.JWT_SECRET as string,
-        ) as PayLoad;
+//         const { sub } = verify(
+//             token,
+//             Env.JWT_SECRET as string,
+//         ) as PayLoad;
 
-        return sub;
-    } catch (error) {
-        return null
-    }
-}
+//         return sub;
+//     } catch (error) {
+//         return null
+//     }
+// }

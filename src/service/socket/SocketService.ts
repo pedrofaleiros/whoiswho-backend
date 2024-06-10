@@ -6,7 +6,6 @@ import RoomRepository from "../../repository/RoomRepository"
 import PlayerRepository from "../../repository/PlayerRepository"
 import PlaceRepository from "../../repository/PlaceRepository"
 import { SocketError } from "../../utils/errors"
-import getUserId from "../../utils/getUserId"
 import CategoryRepository from "../../repository/CategoryRepository"
 
 class SocketService {
@@ -117,17 +116,15 @@ class SocketService {
         return room;
     }
 
-    protected async validateUser(token: any): Promise<User> {
-        const userId = getUserId(token);
-        if (!userId) throw new SocketError('Usuário inválido.');
+    protected async validateUser(userId: any): Promise<User> {
+        if (typeof userId !== 'string') throw new SocketError('Usuário inválido.');
         const user = await this.userR.findById(userId);
         if (user === null) throw new SocketError('Usuário não encontrado.');
         return user;
     }
 
-    protected async validatePlayer(token: any): Promise<Player> {
-        const userId = getUserId(token);
-        if (!userId) throw new SocketError('Usuário inválido.');
+    protected async validatePlayer(userId: any): Promise<Player> {
+        if (typeof userId !== 'string') throw new SocketError('Usuário inválido.');
         const player = await this.playerR.findById(userId);
         if (player === null) throw new SocketError('Jogador não encontrado.');
         return player;
