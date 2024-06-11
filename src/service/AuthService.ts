@@ -58,7 +58,7 @@ class AuthService {
     }
 
     private validateUsername(username: any) {
-        if (typeof username !== 'string' || username.length < 3 || username.length > 64) {
+        if (typeof username !== 'string' || username.length < 3 || username.length > 32) {
             throw new ValidationError("Nome de usuário inválido.");
         }
     }

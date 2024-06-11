@@ -21,7 +21,7 @@ class RoomService {
 
         const dif = this.dateDif(room.createdAt, now)
 
-        if(dif > 60 * 5) return null
+        if (dif > 60 * 5) return null
 
         return room.code
     }
@@ -58,11 +58,21 @@ class RoomService {
     }
 
     private async getRoomCode(): Promise<string> {
-        var roomCode = this.generateRoomCode()
-        while (await this.repository.findByCode(roomCode) !== null) {
-            roomCode = this.generateRoomCode()
+        const rooms = await this.repository.listRooms()
+        const len = rooms.length + 1
+        if (len >= 0 && len < 10) {
+            return `000${len}`
+        } else if (len < 100) {
+            return `00${len}`
+        } else if (len < 1000) {
+            return `0${len}`
         }
-        return roomCode
+        return `${len}`
+        // var roomCode = this.generateRoomCode()
+        // while (await this.repository.findByCode(roomCode) !== null) {
+        //     roomCode = this.generateRoomCode()
+        // }
+        // return roomCode
     }
 
     private generateRoomCode(): string {
