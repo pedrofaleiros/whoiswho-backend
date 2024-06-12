@@ -14,6 +14,7 @@ class PlaceRepository {
 
     async findAll() {
         return await prismaClient.place.findMany({
+            where: { placeCategoryId: null },
             include: { Professions: true },
             orderBy: { name: "asc" }
         })
