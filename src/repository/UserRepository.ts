@@ -4,6 +4,13 @@ import { UserModel } from "../model/UserModel";
 
 class UserRepository {
 
+    async setLastActivity(id: string) {
+        await prismaClient.user.update({
+            where: { id: id },
+            data: { lastActivity: new Date() }
+        })
+    }
+
     async findById(id: string): Promise<User | null> {
         return await prismaClient.user.findUnique({ where: { id: id } })
     }

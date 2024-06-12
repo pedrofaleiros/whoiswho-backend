@@ -12,6 +12,7 @@ import SocketController from './controller/SocketController'
 import prismaClient from './utils/prismaClient'
 import { createPlaces } from './utils/routines/createPlaces'
 import { deleteRooms } from './utils/routines/deleteRooms'
+import { deleteUsers } from './utils/routines/deleteUsers'
 
 class App {
 
@@ -44,6 +45,7 @@ class App {
             console.clear()
             await createPlaces()
             await deleteRooms(12)
+            await deleteUsers(12)
             console.log(`\nrunning at ${Env.PORT}`)
         })
     }

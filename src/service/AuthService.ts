@@ -1,7 +1,3 @@
-// import { hash } from "bcryptjs"
-// import { UserModel } from "../model/UserModel"
-// import { verifyPassword } from "../utils/verifyPassword"
-// import { getJWT } from "../utils/getJWT"
 import UserRepository from "../repository/UserRepository"
 import { ResourceNotFoundError, UsecaseError, ValidationError } from "../utils/errors"
 
@@ -58,8 +54,14 @@ class AuthService {
     }
 
     private validateUsername(username: any) {
-        if (typeof username !== 'string' || username.length < 3 || username.length > 32) {
+        if (typeof username !== 'string') {
             throw new ValidationError("Nome de usuário inválido.");
+        }
+        if (username.length < 3) {
+            throw new ValidationError("Nome de usuário deve ter no mínimo 3 caracteres.");
+        }
+        if (username.length > 25) {
+            throw new ValidationError("Nome de usuário deve ter no máximo 25 caracteres.");
         }
     }
 

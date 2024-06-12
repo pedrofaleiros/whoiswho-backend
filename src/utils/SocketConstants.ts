@@ -10,6 +10,7 @@ class SocketConstants {
 
     static START_GAME = "startGame"
     static FINISH_GAME = "finishGame"
+    static REMOVE_PLAYER = "removePlayer"
 
     static ROOM_CODE = "roomCode"
     static GAME_STATUS = "gameStatus"

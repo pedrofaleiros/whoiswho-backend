@@ -2,6 +2,7 @@ import { Server, Socket } from "socket.io";
 import SocketService from "./SocketService";
 import { SocketError } from "../../utils/errors";
 import { SocketConst } from "../../utils/SocketConstants";
+import { Player } from "@prisma/client";
 
 class JoinRoomService extends SocketService {
     async handle(io: Server, socket: Socket, data: any) {
@@ -11,6 +12,8 @@ class JoinRoomService extends SocketService {
             const user = await this.validateUser(userId);
             const room = await this.validateRoom(roomCode);
 
+            await this.userR.setLastActivity(user.id)
+
             // Verifica se o usuario ja esta ativo em uma sala
             const findPlayer = await this.playerR.findById(user.id)
             if (findPlayer && findPlayer.socketId) {
@@ -18,6 +21,9 @@ class JoinRoomService extends SocketService {
                 if (findPlayer.socketId === socket.id) return;
                 await this.disconnectPlayer(io, room, findPlayer)
             }
+
+            const players: Player[] = await this.playerR.listByRoom(room.code)
+            if (players.length >= 10) throw new SocketError('A sala já esta cheia. Máximo: 10 jogadores.')
 
             await this.playerR.save({
                 userId: user.id,

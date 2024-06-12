@@ -6,6 +6,7 @@ import SetImpostorsService from "../service/socket/SetImpostorsService";
 import StartGameService from "../service/socket/StartGameService";
 import FinishGameService from "../service/socket/FinishGameService";
 import SetCategoryService from "../service/socket/SetCategoryService";
+import RemovePlayerService from "../service/socket/RemovePlayerService";
 class SocketController {
 
     private joinRoom: JoinRoomService
@@ -14,6 +15,7 @@ class SocketController {
     private startGame: StartGameService
     private finishGame: FinishGameService
     private setCategory: SetCategoryService
+    private removePlayer: RemovePlayerService
 
     constructor() {
         this.joinRoom = new JoinRoomService()
@@ -22,6 +24,7 @@ class SocketController {
         this.startGame = new StartGameService()
         this.finishGame = new FinishGameService()
         this.setCategory = new SetCategoryService()
+        this.removePlayer = new RemovePlayerService()
     }
 
     async handleConnection(io: Server, socket: Socket) {
@@ -33,6 +36,11 @@ class SocketController {
         socket.on(
             SocketConst.DISCONNECT,
             async (_) => await this.disconnect.handle(io, socket)
+        );
+
+        socket.on(
+            SocketConst.REMOVE_PLAYER,
+            async (data) => await this.removePlayer.handle(io, socket, data)
         );
 
         socket.on(

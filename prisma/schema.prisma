@@ -16,6 +16,9 @@ model User {
 
   Rooms Room[]
   Place Place[]
+
+  createdAt    DateTime @default(now())
+  lastActivity DateTime @default(now())
 }
 
 enum GameStatus {
