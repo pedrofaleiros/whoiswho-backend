@@ -20,8 +20,8 @@ class RoomService {
         const now = new Date()
 
         const dif = this.dateDif(room.createdAt, now)
-
-        if (dif > 60 * 5) return null
+        const hours = 12;
+        if (dif > 60 * hours) return null
 
         return room.code
     }
@@ -58,21 +58,20 @@ class RoomService {
     }
 
     private async getRoomCode(): Promise<string> {
-        const rooms = await this.repository.listRooms()
-        const len = rooms.length + 1
-        if (len >= 0 && len < 10) {
-            return `000${len}`
-        } else if (len < 100) {
-            return `00${len}`
-        } else if (len < 1000) {
-            return `0${len}`
-        }
-        return `${len}`
-        // var roomCode = this.generateRoomCode()
-        // while (await this.repository.findByCode(roomCode) !== null) {
-        //     roomCode = this.generateRoomCode()
+        // ---> RoomCode Sequencial
+        // const rooms = await this.repository.listRooms()
+        // var code = rooms.length + 1
+        // while (await this.repository.findByCode(code.toString().padStart(4, '0')) !== null) {
+        //     code += 1;
         // }
-        // return roomCode
+        // return code.toString().padStart(4, '0');
+
+        // ---> RoomCode Aleatório
+        var roomCode = this.generateRoomCode()
+        while (await this.repository.findByCode(roomCode) !== null) {
+            roomCode = this.generateRoomCode()
+        }
+        return roomCode
     }
 
     private generateRoomCode(): string {
